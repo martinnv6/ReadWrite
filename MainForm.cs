@@ -9,7 +9,8 @@ using System.IO;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.Linq;
-
+using System.Threading;
+using System.Text;
 
 namespace NationalInstruments.Examples.SimpleReadWrite
 {
@@ -34,6 +35,12 @@ namespace NationalInstruments.Examples.SimpleReadWrite
         private Button bntnReadMemory;
         private TextBox txtCommandDescription;
         private CheckBox checkBoxLog;
+        private TextBox txtFile;
+        private Button btnLoopRead;
+        private Label label1;
+        private RadioButton radioButton1;
+        private RadioButton radioButton2;
+        private Button btnCancel;
         private List<Commands> commands;
 
         public void LoadJson()
@@ -76,6 +83,7 @@ namespace NationalInstruments.Examples.SimpleReadWrite
            LoadJson();
             
             ddlCommandos.DataSource = commands.Select(x=>x.value).OrderByDescending(y => y).ToList();
+            txtFile.Text = DateTime.Now.ToString("yy-mm-dd HHMMsss");
         }
 
 
@@ -121,6 +129,12 @@ namespace NationalInstruments.Examples.SimpleReadWrite
             this.ddlCommandos = new System.Windows.Forms.ComboBox();
             this.txtCommandDescription = new System.Windows.Forms.TextBox();
             this.checkBoxLog = new System.Windows.Forms.CheckBox();
+            this.txtFile = new System.Windows.Forms.TextBox();
+            this.btnLoopRead = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.radioButton2 = new System.Windows.Forms.RadioButton();
+            this.btnCancel = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // queryButton
@@ -165,7 +179,7 @@ namespace NationalInstruments.Examples.SimpleReadWrite
             | System.Windows.Forms.AnchorStyles.Right)));
             this.writeTextBox.Location = new System.Drawing.Point(0, 133);
             this.writeTextBox.Name = "writeTextBox";
-            this.writeTextBox.Size = new System.Drawing.Size(472, 20);
+            this.writeTextBox.Size = new System.Drawing.Size(759, 20);
             this.writeTextBox.TabIndex = 2;
             this.writeTextBox.Text = "*IDN?\\n";
             // 
@@ -179,7 +193,7 @@ namespace NationalInstruments.Examples.SimpleReadWrite
             this.readTextBox.Name = "readTextBox";
             this.readTextBox.ReadOnly = true;
             this.readTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.readTextBox.Size = new System.Drawing.Size(472, 176);
+            this.readTextBox.Size = new System.Drawing.Size(759, 359);
             this.readTextBox.TabIndex = 6;
             this.readTextBox.TabStop = false;
             // 
@@ -187,9 +201,9 @@ namespace NationalInstruments.Examples.SimpleReadWrite
             // 
             this.clearButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.clearButton.Location = new System.Drawing.Point(6, 429);
+            this.clearButton.Location = new System.Drawing.Point(6, 612);
             this.clearButton.Name = "clearButton";
-            this.clearButton.Size = new System.Drawing.Size(472, 24);
+            this.clearButton.Size = new System.Drawing.Size(759, 24);
             this.clearButton.TabIndex = 7;
             this.clearButton.Text = "Limpiar";
             this.clearButton.Click += new System.EventHandler(this.clear_Click);
@@ -221,13 +235,14 @@ namespace NationalInstruments.Examples.SimpleReadWrite
             // 
             // bntnReadMemory
             // 
+            this.bntnReadMemory.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.bntnReadMemory.Enabled = false;
-            this.bntnReadMemory.Location = new System.Drawing.Point(380, 159);
+            this.bntnReadMemory.Location = new System.Drawing.Point(684, 179);
             this.bntnReadMemory.Name = "bntnReadMemory";
             this.bntnReadMemory.Size = new System.Drawing.Size(75, 23);
             this.bntnReadMemory.TabIndex = 10;
-            this.bntnReadMemory.Text = "Leer A";
-            this.bntnReadMemory.UseVisualStyleBackColor = true;
+            this.bntnReadMemory.Text = "Leer Buffer";
+            this.bntnReadMemory.UseVisualStyleBackColor = false;
             this.bntnReadMemory.Click += new System.EventHandler(this.bntnReadMemory_Click);
             // 
             // ddlCommandos
@@ -250,7 +265,7 @@ namespace NationalInstruments.Examples.SimpleReadWrite
             this.txtCommandDescription.Name = "txtCommandDescription";
             this.txtCommandDescription.ReadOnly = true;
             this.txtCommandDescription.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtCommandDescription.Size = new System.Drawing.Size(339, 65);
+            this.txtCommandDescription.Size = new System.Drawing.Size(626, 84);
             this.txtCommandDescription.TabIndex = 6;
             this.txtCommandDescription.TabStop = false;
             // 
@@ -267,12 +282,84 @@ namespace NationalInstruments.Examples.SimpleReadWrite
             this.checkBoxLog.Text = "Guardar en archivo de log";
             this.checkBoxLog.UseVisualStyleBackColor = true;
             // 
+            // txtFile
+            // 
+            this.txtFile.Enabled = false;
+            this.txtFile.Location = new System.Drawing.Point(487, 221);
+            this.txtFile.Name = "txtFile";
+            this.txtFile.Size = new System.Drawing.Size(162, 20);
+            this.txtFile.TabIndex = 13;
+            // 
+            // btnLoopRead
+            // 
+            this.btnLoopRead.BackColor = System.Drawing.SystemColors.Highlight;
+            this.btnLoopRead.Enabled = false;
+            this.btnLoopRead.Location = new System.Drawing.Point(655, 208);
+            this.btnLoopRead.Name = "btnLoopRead";
+            this.btnLoopRead.Size = new System.Drawing.Size(108, 33);
+            this.btnLoopRead.TabIndex = 10;
+            this.btnLoopRead.Text = "Lectura Continua";
+            this.btnLoopRead.UseVisualStyleBackColor = false;
+            this.btnLoopRead.Click += new System.EventHandler(this.btnLoopReadClick);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(484, 205);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(165, 13);
+            this.label1.TabIndex = 14;
+            this.label1.Text = "Nombre Archivo lectura continua:";
+            // 
+            // radioButton1
+            // 
+            this.radioButton1.AutoSize = true;
+            this.radioButton1.Enabled = false;
+            this.radioButton1.Location = new System.Drawing.Point(381, 224);
+            this.radioButton1.Name = "radioButton1";
+            this.radioButton1.Size = new System.Drawing.Size(75, 17);
+            this.radioButton1.TabIndex = 15;
+            this.radioButton1.Text = "Memoria B";
+            this.radioButton1.UseVisualStyleBackColor = true;
+            // 
+            // radioButton2
+            // 
+            this.radioButton2.AutoSize = true;
+            this.radioButton2.Checked = true;
+            this.radioButton2.Enabled = false;
+            this.radioButton2.Location = new System.Drawing.Point(381, 189);
+            this.radioButton2.Name = "radioButton2";
+            this.radioButton2.Size = new System.Drawing.Size(75, 17);
+            this.radioButton2.TabIndex = 15;
+            this.radioButton2.TabStop = true;
+            this.radioButton2.Text = "Memoria A";
+            this.radioButton2.UseVisualStyleBackColor = true;
+            // 
+            // btnCancel
+            // 
+            this.btnCancel.BackColor = System.Drawing.Color.Red;
+            this.btnCancel.Enabled = false;
+            this.btnCancel.Location = new System.Drawing.Point(671, 213);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnCancel.TabIndex = 16;
+            this.btnCancel.Text = "Cancelar";
+            this.btnCancel.UseVisualStyleBackColor = false;
+            this.btnCancel.Visible = false;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-            this.ClientSize = new System.Drawing.Size(484, 461);
+            this.ClientSize = new System.Drawing.Size(771, 644);
+            this.Controls.Add(this.btnCancel);
+            this.Controls.Add(this.radioButton2);
+            this.Controls.Add(this.radioButton1);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.txtFile);
             this.Controls.Add(this.checkBoxLog);
             this.Controls.Add(this.ddlCommandos);
+            this.Controls.Add(this.btnLoopRead);
             this.Controls.Add(this.bntnReadMemory);
             this.Controls.Add(this.stringToReadLabel);
             this.Controls.Add(this.stringToWriteLabel);
@@ -290,7 +377,7 @@ namespace NationalInstruments.Examples.SimpleReadWrite
             this.MinimumSize = new System.Drawing.Size(500, 500);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Lectura/Escritura simple";
+            this.Text = "FCFM - Plataforma de comunicacion GPIB - VISA";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -426,6 +513,12 @@ namespace NationalInstruments.Examples.SimpleReadWrite
             clearButton.Enabled = isSessionOpen;
             ddlCommandos.Enabled = isSessionOpen;
             bntnReadMemory.Enabled = isSessionOpen;
+            checkBoxLog.Enabled = isSessionOpen;
+            txtCommandDescription.Enabled = isSessionOpen;
+            txtFile.Enabled = isSessionOpen;
+            radioButton1.Enabled = isSessionOpen;
+            radioButton2.Enabled = isSessionOpen;
+            btnLoopRead.Enabled = isSessionOpen;
             if(isSessionOpen)
             {
                 readTextBox.Text = String.Empty;
@@ -448,8 +541,13 @@ namespace NationalInstruments.Examples.SimpleReadWrite
             Cursor.Current = Cursors.WaitCursor;
             try
             {
+
+                
                 mbSession.SetAttributeBoolean(AttributeType.DmaAllowEn, true);
-                var responseString = mbSession.Query("DBA?");
+                var cmd = "DB" + (radioButton2.Checked ? "A" : "B") + "?";//ToDo: Rename Radio
+                var responseString = mbSession.Query(cmd);
+                byte[] toBytes = Encoding.ASCII.GetBytes(responseString);
+                string something = Encoding.ASCII.GetString(toBytes);
 
                 // tmpByteArray = mbSession.ReadByteArray(1024);
                 //.ReadToFile("martin");
@@ -460,7 +558,7 @@ namespace NationalInstruments.Examples.SimpleReadWrite
                 readTextBox.Text = InsertCommonEscapeSequences(responseString);
                 if (checkBoxLog.Checked)
                 {
-                    Log.WriteLog("", responseString);
+                    Log.WriteLog(cmd, responseString,txtFile.Text + ".txt");
                 }
             }
             catch (Exception exp)
@@ -473,12 +571,82 @@ namespace NationalInstruments.Examples.SimpleReadWrite
             }
         }
 
+        
+
         private void ddlCommandos_SelectedIndexChanged(object sender, EventArgs e)
         {
             var text = ddlCommandos.SelectedValue;
             txtCommandDescription.Text = commands.FirstOrDefault(x => x.value == text.ToString()).description;
             writeTextBox.Text = ddlCommandos.SelectedValue.ToString();
             
+        }
+
+        private BackgroundWorker _worker;
+
+        private void btnLoopReadClick(object sender, EventArgs e)
+        {
+            Log.WriteLog(mbSession.ResourceName + " Lectura continua", "", txtFile.Text + ".txt");
+
+            _worker = new BackgroundWorker();
+            _worker.WorkerSupportsCancellation = true;
+
+            _worker.DoWork += new DoWorkEventHandler((state, args) =>
+            {
+                do
+                {
+                    if (_worker.CancellationPending)
+                        break;
+
+                    //mbSession.Timeout = Session.InfiniteTimeout;
+
+
+                    try
+                    {
+                        mbSession.SetAttributeBoolean(AttributeType.DmaAllowEn, true);
+                        MessageBasedSessionReader Reader = new MessageBasedSessionReader(mbSession);
+                        Reader.BinaryEncoding = BinaryEncoding.DefiniteLengthBlockData;
+                        Reader.BinaryEncoding = BinaryEncoding.RawLittleEndian;
+                        string responseString2 = Reader.ReadLine();
+                        if (responseString2.Length != 1)
+                        {
+                            Log.SimpleWriteLog(responseString2, txtFile.Text + ".txt");
+                            //readTextBox.Text += responseString2 + ",";
+
+                        }
+                    }
+                    catch (VisaException ex)
+                    {
+                        string textToWrite = ReplaceCommonEscapeSequences("STOP");
+                        //readTextBox.Text = "Deteniendo\n";
+                        mbSession.Write(textToWrite);
+                        textToWrite = ReplaceCommonEscapeSequences("DMA?");
+                        //readTextBox.Text = "Llenando buffer...";
+                        mbSession.Write(textToWrite);
+
+                        //MessageBox.Show("¡Tiempo excedido desde que se recibió la primer respesta! \\n Error: "+ ex.Message);
+                        //return;
+                    }
+
+                } while (true);
+            });
+
+            _worker.RunWorkerAsync();
+
+            readTextBox.Text = Log.dumpLine(txtFile.Text + ".txt");
+            btnLoopRead.Visible = false;
+            btnCancel.Visible = true;
+            btnCancel.Enabled = true;
+
+
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            btnCancel.Enabled = false;
+            btnCancel.Visible = false;
+            btnLoopRead.Enabled = true;
+            btnLoopRead.Visible = true;
+            _worker.CancelAsync();
         }
     }
 }

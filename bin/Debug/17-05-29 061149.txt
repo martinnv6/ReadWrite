@@ -1,0 +1,12 @@
+
+Entrada de Log : 06:05:54 miércoles, 29 de noviembre de 2017
+  :
+  :Commando ejecutado -> GPIB0::8::INSTR Lectura continua
+  :
+-------------------------------
+
+Entrada de Log : 06:06:56 miércoles, 29 de noviembre de 2017
+  :
+  :Commando ejecutado -> GPIB0::8::INSTR Lectura continua
+  :
+-------------------------------

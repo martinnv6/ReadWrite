@@ -9,9 +9,9 @@ namespace NationalInstruments.Examples.SimpleReadWrite
 {
     public static class Log
     {
-        public static void WriteLog(string command,string message)
+        public static void WriteLog(string command,string message, string file = null)
         {
-            using (StreamWriter w = File.AppendText("log.txt"))
+            using (StreamWriter w = File.AppendText(file ?? "log.txt"))
             {
                 Logw(command, message, w);
                
@@ -20,11 +20,27 @@ namespace NationalInstruments.Examples.SimpleReadWrite
            
         }
 
-        public static void dumpLine()
+        public static void SimpleWriteLog(string message, string file = null)
         {
-            using (StreamReader r = File.OpenText("log.txt"))
+            using (StreamWriter w = File.AppendText(file ?? "log.txt"))
             {
-                DumpLog(r);
+                SimpleLogw(message, w);
+
+            }
+
+
+        }
+
+        private static void SimpleLogw(string message, StreamWriter w)
+        {
+            w.Write(message + ',');
+        }
+
+        public static string dumpLine(string file = null)
+        {
+            using (StreamReader r = File.OpenText(file ?? "log.txt"))
+            {
+                return DumpLog(r);
             }
         }
 
@@ -39,13 +55,16 @@ namespace NationalInstruments.Examples.SimpleReadWrite
             w.WriteLine("-------------------------------");
         }
 
-        public static void DumpLog(StreamReader r)
+
+
+        public static string DumpLog(StreamReader r)
         {
             string line;
             while ((line = r.ReadLine()) != null)
             {
-                Console.WriteLine(line);
+                return line;
             }
+            return null;
         }
     }
 }
