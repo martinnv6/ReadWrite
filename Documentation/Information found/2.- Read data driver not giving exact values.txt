@@ -1,0 +1,1 @@
+https://forums.ni.com/t5/LabVIEW/Read-data-driver-not-giving-exact-values/td-p/279846
