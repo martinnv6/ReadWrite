@@ -1,0 +1,49 @@
+[{ // Commands
+  "id": 1,
+  "value": "AUT",
+  "type": "write",
+  "description": "Escritura - Configuracion automática"
+},
+{"id": 2,
+  "value": "*IDN?\\n",
+  "type": "query",
+  "description": "Lectura - Regresa informacion del dispositivo"
+},
+{"id": 3,
+  "value": "DMA?",
+  "type": "write",
+  "description": "Query - Regresa datos binarios de medicion equivalentes al numero de puntos de ejemplo desde la meoria A. (Mire el apendice B para info de Formato de transformacion de datos binarios"
+},
+{"id": 4,
+  "value": "DMB?",
+  "type": "write",
+  "description": "Query - Regresa datos binarios de medicion equivalentes al numero de puntos de ejemplo desde la meoria A. (Mire el apendice B para info de Formato de transformacion de datos binarios"
+},
+{"id": 5,
+  "value": "DATE?",
+  "type": "read",
+  "description": "Lectura - Obtiene la fecha configurada del dispositivo yy,mm,dd"
+},
+{"id": 6,
+  "value": "DATE yy,mm,dd",
+  "type": "write",
+  "description": "Escritura - Configura la fecha del dsipositivo, Cambie por la fecha deseada en el formato indicado"
+},
+{"id": 7,
+  "value": "SSI",
+  "type": "write",
+  "description": "Escritura - Sweep a Single, es decir el dispositivo hace un barrido y lo grafica en pantalla"
+},
+{"id": 8,
+  "value": "SRT",
+  "type": "write",
+  "description": "Escritura - Sweep a Repeat, es decir el dispositivo repite barrido y lo grafica en pantalla"
+},
+{"id": 9,
+  "value": "STOP",
+  "type": "write",
+  "description": "Escritura - Sweep a Stop, es decir el dispositivo detiene la repeticion de barrido"
+}
+
+]
+

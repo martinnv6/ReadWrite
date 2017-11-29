@@ -1,0 +1,14 @@
+
+Log Entry : 03:02:25 miércoles, 29 de noviembre de 2017
+  :
+  :Commando ejecutado -> Query - *IDN?
+
+  :ANRITSU,MS9710B,0,V3.13&V3.11
+
+-------------------------------
+
+Entrada de Log : 03:07:49 miércoles, 29 de noviembre de 2017
+  :
+  :Commando ejecutado -> Write - DQA?
+  :
+-------------------------------
